@@ -1,0 +1,40 @@
+Memory:
+	4096 memory locations, all 8-bits
+	chip-8 interpreter occupies the first 512 bytes of memory
+	Most programs thus begin at location 0x200
+	The uppermost 256 bytes (0xf00-0xfff) are reserved for display refresh
+	0xea0-0xeff reserved for call stack, internal use and other variables
+	For modern emulators, no need to preserve lower 512 bytes of memory so common to store font data there
+
+Registers:
+	16 8-bit data registers named V0 to VF
+	The VF register doubles as a flag for some instructions thus should avoid using
+	In addition: VF used for carry flag
+	subtraction: VF used for not borrow flag
+	In draw instruction: VF is set upon pixel collision
+
+	Address register called I: 16-bits wide and used with opcodes that involve memory ops
+
+Stack:
+	Only used to store return addressed when subroutines are called
+	Original 1802 version allocated 48 bytes for up to 12 levels of nesting
+	Modern implementations normally have at least 16 levels
+
+Timers:
+	2 timers, both count down at 60 Hz until they reach 0
+	Delay timer: Used for timing events of games. Value can be set and read
+	Sound timer: Used for sound effects. When value nonzera, a beeping sound is made
+
+Input:
+	Done with a hex keyboard that has 16 keys which range from 0 to F
+	the 8, 4, 6 and 2 keys are used for directional input
+	Three opcodes used to detect input. 
+
+Graphics and Sound:
+	Original display resolution is 64x32 pixels, and color is monochrome
+	Drawn to the screen solely by drawing sprites, 8 pixels wide and may be 1-15 pixels high
+	Sprite pixels that are set flip the color of the corresponding screen pixel
+	Unset sprites do nothing
+	The carry flag (VF) is set to 1 if any screen pixels are flipped from set to unset when a sprite is drawn and set to 0 otherwise (used for collision detection)
+
+
